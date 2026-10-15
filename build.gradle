@@ -1,0 +1,33 @@
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+}
+
+version = '1.1.0'
+group = 'com.wardendimension'
+base { archivesName = 'warden_dimension-1.20.1' }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: 'official', version: '1.20.1'
+    runs {
+        client { workingDirectory project.file('run'); property 'forge.logging.console.level', 'debug'
+            mods { "warden_dimension" { source sourceSets.main } } }
+        server { workingDirectory project.file('run'); property 'forge.logging.console.level', 'debug'
+            mods { "warden_dimension" { source sourceSets.main } } }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.20.1-47.2.0'
+}
+
+tasks.named('jar', Jar).configure {
+    manifest.attributes(["Specification-Title": "warden_dimension", "Implementation-Version": project.jar.archiveVersion])
+    finalizedBy 'reobfJar'
+}
